@@ -1,0 +1,49 @@
+name: run main.py
+
+concurrency: 1
+
+on:
+    push:
+      branches: ['main']
+
+jobs:
+
+  deploy:
+    name: 'Deploy bundle'
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out this repo, so that this workflow can access it.
+
+      - uses: actions/checkout@v5
+
+      - name: "Set up Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".python-version"
+        run: uv build --wheel
+
+      - name: "Build app.yml file"
+        run: |
+            cat > app.yml<<EOF
+            command: ['streamlit', 'run', 'app.py']
+            env:
+            - name: 'OPENAI_API_KEY'
+                value: ${{ secrets.OPENAI_API_KEY }}
+            EOF
+      - name: "Bring the whl file forward for app"
+        run: mv dist/*.whl .
+
+      - name: "Initialise Databricks cli"
+      - uses: actions/checkout@v3
+      # Download the Databricks CLI.
+      # See https://github.com/databricks/setup-cli
+      - uses: databricks/setup-cli@main
+
+      # Deploy the bundle to the "dev" target as defined
+      # in the bundle's settings file.
+      - run: databricks bundle deploy
+        working-directory: .
+        env:
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_SP_TOKEN }}
+          DATABRICKS_BUNDLE_ENV: dev
