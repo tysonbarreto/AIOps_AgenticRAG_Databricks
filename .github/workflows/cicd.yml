@@ -33,7 +33,7 @@ jobs:
             - name: 'OPENAI_API_KEY'
                 value: ${{ secrets.OPENAI_API_KEY }}
             EOF
-      - name: "Bring the whl file forward for app"
+      {# - name: "Bring the whl file forward for app"
         run: mv dist/*.whl .
 
       - name: "Initialise Databricks cli"
@@ -48,4 +48,4 @@ jobs:
         working-directory: .
         env:
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_SP_TOKEN }}
-          DATABRICKS_BUNDLE_ENV: dev
+          DATABRICKS_BUNDLE_ENV: dev #}
