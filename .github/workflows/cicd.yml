@@ -51,13 +51,4 @@ jobs:
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_SP_TOKEN }}
           DATABRICKS_BUNDLE_ENV: dev
 
-  cd:
-    name: 'Update deplpyed app'
-    runs-on: ubuntu-latest
-    needs:
-      - ci
-    steps:
-        - name: 'Hello world'
-          run: echo "Hello world"
-
 
