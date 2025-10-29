@@ -21,10 +21,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version-file: ".python-version"
+
+      - name: "Build wheel file"
         run: uv build --wheel
 
       - name: "Build app.yml file"
-        run: |
+        run: >
             cat > app.yml<<EOF
             command: ['streamlit', 'run', 'app.py']
             env:
