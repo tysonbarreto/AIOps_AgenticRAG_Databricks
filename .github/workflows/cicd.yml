@@ -1,6 +1,4 @@
-name: run main.py
-
-concurrency: 1
+name: 'Asset Bundle & App deployment'
 
 on:
     push:
@@ -59,6 +57,8 @@ jobs:
     needs:
       - ci
     steps:
+      - uses: actions/checkout@v3
+
       - name: 'Initialise Databricks cli and deploy bundle'     
       - uses: databricks/setup-cli@main
       # Deploy the bundle to the "dev" target as defined
