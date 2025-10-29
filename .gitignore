@@ -7,4 +7,3 @@ __pycache__/
 scratch/**
 !scratch/README.md
 .env
-app.yml
