@@ -14,6 +14,39 @@ jobs:
 
     steps:
       # Check out this repo, so that this workflow can access it.
+      - uses: actions/checkout@v3
+
+      - name: "Build app.yml file"
+        run: |
+            cat > app.yml << EOF\
+            command: ['streamlit', 'run', 'app.py']\
+            env:\
+            - name: 'OPENAI_API_KEY'\
+                value: ${{ secrets.OPENAI_API_KEY }}\
+            EOF
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+  
+      - name: Verify uv Installation
+        run: |
+          echo "Checking uv version:"
+          uv --version
+
+      - name: "Build wheel file"
+        run: uv build --wheel
+
+      # Download the Databricks CLI.
+      # See https://github.com/databricks/setup-cli
+      - uses: databricks/setup-cli@main
+      # Deploy the bundle to the "dev" target as defined
+      # in the bundle's settings file.
+      - run: databricks bundle deploy
+        working-directory: .
+        env:
+          DATABRICKS_TOKEN: ${{ secrets.DATBRICKS_SP_TOKEN }}
+          DATABRICKS_BUNDLE_ENV: dev
+
 
       - uses: actions/checkout@v5
 
@@ -22,14 +55,7 @@ jobs:
         with:
           python-version-file: ".python-version"
 
-      - name: "Build wheel file"
-        run: uv build --wheel
 
-      - name: "Build app.yml file"
-        run: >
-            cat > app.yml<<EOF
-            command: ['streamlit', 'run', 'app.py']
-            env:
-            - name: 'OPENAI_API_KEY'
-                value: ${{ secrets.OPENAI_API_KEY }}
-            EOF
+
+
+
