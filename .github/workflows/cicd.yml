@@ -36,6 +36,9 @@ jobs:
       - name: "Build wheel file"
         run: uv build --wheel
 
+      - name: "Check folder"
+        run: ls -lna
+
       # Download the Databricks CLI.
       # See https://github.com/databricks/setup-cli
       - uses: databricks/setup-cli@main
