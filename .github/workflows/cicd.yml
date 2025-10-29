@@ -72,7 +72,7 @@ jobs:
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_SP_TOKEN }}
 
       - name: 'Initialise Databricks cli and deploy bundle'     
-        run: databricks apps deploy my-agentic-rag-app --source-code-path /Workspace/Users/tysonbarretto1991@gmail.com/.bundle/${bundle.name}/${bundle.target}/files
+        run: databricks apps deploy my-agentic-rag-app
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_SP_TOKEN }}
