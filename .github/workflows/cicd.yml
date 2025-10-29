@@ -39,6 +39,9 @@ jobs:
       - name: "Check folder"
         run: ls -lna
 
+      - name: "Bring wheel file forward for deployment"
+        run: cp dist/*.whl .
+
       # Download the Databricks CLI.
       # See https://github.com/databricks/setup-cli
       - uses: databricks/setup-cli@main
@@ -50,14 +53,6 @@ jobs:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_SP_TOKEN }}
           DATABRICKS_BUNDLE_ENV: dev
-
-
-      - uses: actions/checkout@v5
-
-      - name: "Set up Python"
-        uses: actions/setup-python@v5
-        with:
-          python-version-file: ".python-version"
 
 
 
