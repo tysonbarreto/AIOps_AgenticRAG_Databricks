@@ -64,7 +64,7 @@ jobs:
       # Deploy the bundle to the "dev" target as defined
       # in the bundle's settings file.
       - run: databricks apps deploy my-agentic-rag-app --source-code-path /Workspace/Users/tysonbarretto1991@gmail.com/.bundle/${bundle.name}/${bundle.target}/files
-        working-directory: .
+        # working-directory: .
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_SP_TOKEN }}
