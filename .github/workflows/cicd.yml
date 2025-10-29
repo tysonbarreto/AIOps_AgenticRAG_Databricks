@@ -8,8 +8,8 @@ on:
 
 jobs:
 
-  deploy:
-    name: 'Deploy bundle'
+  ci:
+    name: 'Update source code'
     runs-on: ubuntu-latest
 
     steps:
@@ -42,8 +42,7 @@ jobs:
       - name: "Bring wheel file forward for deployment"
         run: cp dist/*.whl .
 
-      # Download the Databricks CLI.
-      # See https://github.com/databricks/setup-cli
+      - name: 'Initialise Databricks cli and deploy bundle'     
       - uses: databricks/setup-cli@main
       # Deploy the bundle to the "dev" target as defined
       # in the bundle's settings file.
@@ -54,7 +53,19 @@ jobs:
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_SP_TOKEN }}
           DATABRICKS_BUNDLE_ENV: dev
 
-
+  cd:
+    name: 'Update source code'
+    runs-on: ubuntu-latest
+    needs:
+      - ci
+    steps:
+        - name: 'Initialise Databricks cli and update deployed source path'
+        - uses: databricks/setup-cli@main
+        - run: databricks apps deploy my-agentic-rag-app --source-code-path /Workspace/Users/tysonbarretto1991@gmail.com/.bundle/${bundle.name}/${bundle.target}/files
+        env:
+            DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+            DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_SP_TOKEN }}
+            DATABRICKS_BUNDLE_ENV: dev
 
 
 
